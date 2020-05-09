@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { actionCreators } from '../store';
+import ToDo from '../Components/ToDo';
 
-const Home = (props) => {
-  console.log(props);
+const Home = ({ toDos, addToDo }) => {
   const [text, setText] = useState('');
 
   const handleInput = (e) => {
@@ -11,6 +12,7 @@ const Home = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    addToDo(text);
     setText('');
   };
 
@@ -21,13 +23,24 @@ const Home = (props) => {
         <input type="text" value={text} onChange={handleInput} />
         <button>Add</button>
       </form>
-      <ul></ul>
+      <ul>
+        {toDos.map((toDo) => (
+          <ToDo {...toDo} key={toDo.id} />
+        ))}
+      </ul>
     </>
   );
 };
 
 function mapStateToProps(state, ownProps) {
-  return { state };
+  return { toDos: state };
 }
 
-export default connect(mapStateToProps)(Home);
+// mapDispatchToProps로 인해서 Home에서도 props를 수정할 수 있게 됐다.
+// 따라서, dispatch하는 새로운 prop을 만들어서 return
+function mapDispatchToProps(dispatch) {
+  const addToDo = (text) => dispatch(actionCreators.addToDo(text));
+  return { addToDo };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
