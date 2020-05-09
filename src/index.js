@@ -7,6 +7,7 @@ const input = document.getElementById('txt');
 const ADD_TODO = 'ADD_TODO';
 const DELETE_TODO = 'DELETE_TODO';
 
+// 주로 reducer 위에 다음과 같이 정리해놓는다.
 const addToDo = (text) => {
   return {
     type: ADD_TODO,
@@ -43,7 +44,6 @@ store.subscribe(() => console.log(store.getState()));
 const dispatchDeleteToDo = (e) => {
   const id = e.target.parentNode.id;
   store.dispatch(deleteToDo(id));
-  toDoPainting();
 };
 
 const dispatchAddToDo = (text) => {
