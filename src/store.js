@@ -1,21 +1,29 @@
 import { createStore } from 'redux';
+import { createAction } from '@reduxjs/toolkit';
 
-const ADD = 'ADD';
-const DELETE = 'DELETE';
+// -- Redux Toolkit 사용 전
+// const ADD = 'ADD';
+// const DELETE = 'DELETE';
 
-const addToDo = (text) => {
-  return {
-    type: ADD,
-    text,
-  };
-};
+// const addToDo = (text) => {
+//   return {
+//     type: ADD,
+//     text,
+//   };
+// };
 
-const deleteToDo = (id) => {
-  return {
-    type: DELETE,
-    id,
-  };
-};
+// const deleteToDo = (id) => {
+//   return {
+//     type: DELETE,
+//     id,
+//   };
+// };
+
+// -- Redux Toolkit 사용 후
+const addToDo = createAction('ADD');
+const deleteToDo = createAction('DELETE');
+
+// console.log(addToDo(), deleteToDo());
 
 // reducer에서 return 하는 값이 state의 새로운 값으로 대체됨
 const reducer = (
@@ -24,10 +32,10 @@ const reducer = (
 ) => {
   // console.log(localStorage.getItem('toDos'));
   switch (action.type) {
-    case ADD:
-      return [{ text: action.text, id: Date.now() }, ...state];
-    case DELETE:
-      return state.filter((toDo) => toDo.id !== action.id);
+    case addToDo.type:
+      return [{ text: action.payload, id: Date.now() }, ...state];
+    case deleteToDo.type:
+      return state.filter((toDo) => toDo.id !== action.payload);
     default:
       return state;
   }
