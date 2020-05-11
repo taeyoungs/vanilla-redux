@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { actionCreators } from '../store';
+import { add } from '../store';
 import ToDo from '../Components/ToDo';
 
 const Home = ({ toDos, addToDo }) => {
@@ -39,7 +39,7 @@ function mapStateToProps(state, ownProps) {
 // mapDispatchToProps로 인해서 Home에서도 props를 수정할 수 있게 됐다.
 // 따라서, dispatch하는 새로운 prop을 만들어서 return
 function mapDispatchToProps(dispatch) {
-  const addToDo = (text) => dispatch(actionCreators.addToDo(text));
+  const addToDo = (text) => dispatch(add(text));
   return { addToDo };
 }
 

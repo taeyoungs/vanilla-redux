@@ -1,5 +1,5 @@
-import { createStore } from 'redux';
-import { createAction, createReducer } from '@reduxjs/toolkit';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+// import { createStore } from 'redux';
 
 // -- Redux Toolkit 사용 전
 // const ADD = 'ADD';
@@ -20,8 +20,8 @@ import { createAction, createReducer } from '@reduxjs/toolkit';
 // };
 
 // -- Redux Toolkit 사용 후
-const addToDo = createAction('ADD');
-const deleteToDo = createAction('DELETE');
+// const addToDo = createAction('ADD');
+// const deleteToDo = createAction('DELETE');
 
 // console.log(addToDo(), deleteToDo());
 
@@ -46,15 +46,29 @@ const deleteToDo = createAction('DELETE');
 
 // -- Redux Toolkit 사용 후
 
-const reducer = createReducer([], {
-  [addToDo]: (state, action) => {
-    state.push({ text: action.payload, id: Date.now() });
+// const reducer = createReducer(JSON.parse(localStorage.getItem('toDos')) || [], {
+//   [addToDo]: (state, action) => {
+//     state.push({ text: action.payload, id: Date.now() });
+//   },
+//   [deleteToDo]: (state, action) =>
+//     state.filter((toDo) => toDo.id !== action.payload),
+// });
+
+// -- Redux Toolkit ' createSlice '
+
+const toDos = createSlice({
+  name: 'toDosReducer',
+  initialState: JSON.parse(localStorage.getItem('toDos')) || [],
+  reducers: {
+    add: (state, action) => {
+      state.push({ text: action.payload, id: Date.now() });
+    },
+    remove: (state, action) =>
+      state.filter((toDo) => toDo.id !== action.payload),
   },
-  [deleteToDo]: (state, action) =>
-    state.filter((toDo) => toDo.id !== action.payload),
 });
 
-const store = createStore(reducer);
+const store = configureStore({ reducer: toDos.reducer });
 
 const updateLocalStorage = () => {
   localStorage.setItem('toDos', JSON.stringify(store.getState()));
@@ -62,9 +76,6 @@ const updateLocalStorage = () => {
 
 store.subscribe(updateLocalStorage);
 
-export const actionCreators = {
-  addToDo,
-  deleteToDo,
-};
+export const { add, remove } = toDos.actions;
 
 export default store;
